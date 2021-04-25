@@ -4,7 +4,12 @@ type FourBitNumber = [Bit, Bit, Bit, Bit];
 type EightBitNumber = [...FourBitNumber, ...FourBitNumber];
 type SixteenBitNumber = [...EightBitNumber, ...EightBitNumber];
 
-type Upcast<N extends FourBitNumber> = [0, 0, 0, 0, ...N];
+type FourBitZero = [0, 0, 0, 0];
+type EightBitZero = [...FourBitZero, ...FourBitZero];
+type SixteenBitZero = [...EightBitZero, ...EightBitZero];
+
+type UpcastToEightBits<N extends FourBitNumber> = [...FourBitZero, ...N];
+type UpcastToSixteenBits<N extends FourBitNumber | EightBitNumber> = N extends FourBitNumber ? [...EightBitZero, ...FourBitZero, ...N] : [...EightBitZero, ...N];
 
 type And<A extends Bit, B extends Bit> = A extends 1 ? B extends 1 ? 1 : 0 : 0;
 type Or<A extends Bit, B extends Bit> = A extends 1 ? 1 : B extends 1 ? 1 : 0;
@@ -21,7 +26,6 @@ type OneBitAdder<A extends Bit, B extends Bit, C extends Bit = 0> = Nand<A, B> e
       : never
     : never
   : never;
-
   
 type FourBitAdder<
   A extends FourBitNumber, 
