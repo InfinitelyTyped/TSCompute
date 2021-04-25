@@ -1,0 +1,23 @@
+{
+  "name": "tscompute",
+  "version": "0.0.1",
+  "description": "16 bit computational power with only TypeScript types",
+  "main": "index.ts",
+  "scripts": {
+    "test": "tsd"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/InfinitelyTyped/TSCompute.git"
+  },
+  "author": "InfinitelyTyped",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/InfinitelyTyped/TSCompute/issues"
+  },
+  "homepage": "https://github.com/InfinitelyTyped/TSCompute#readme",
+  "devDependencies": {
+    "tsd": "^0.14.0",
+    "typescript": "^4.2.4"
+  }
+}
