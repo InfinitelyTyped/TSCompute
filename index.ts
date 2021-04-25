@@ -17,7 +17,7 @@ type Xnor<A extends Bit, B extends Bit> = Not<Xor<A, B>>;
 type OneBitAdder<A extends Bit, B extends Bit, C extends Bit = 0> = Nand<A, B> extends infer S0
   ? Nand<Nand<A, S0 & Bit>, Nand<B, S0 & Bit>> extends infer S1
     ? Nand<C, S1 & Bit> extends infer S2
-      ? [Nand<S2 & Bit, S0 & Bit>, Nand<Nand<S1 & Bit, S2 & Bit>, Nand<S2 & Bit, C>>, Nand<S2 & Bit, S0 & Bit>]
+      ? [Nand<S2 & Bit, S0 & Bit>, Nand<Nand<S1 & Bit, S2 & Bit>, Nand<S2 & Bit, C>>]
       : never
     : never
   : never;
