@@ -1,4 +1,4 @@
-type Bit = 0 | 1;
+export type Bit = 0 | 1;
 
 type FourBitNumber = [Bit, Bit, Bit, Bit];
 type EightBitNumber = [...FourBitNumber, ...FourBitNumber];
@@ -37,9 +37,9 @@ type _OneBitAdderLookup = {
   }
 }
 
-type OneBitAdder<A extends Bit, B extends Bit, C extends Bit = 0> = _OneBitAdderLookup[A][B][C];
+export type OneBitAdder<A extends Bit, B extends Bit, C extends Bit = 0> = _OneBitAdderLookup[A][B][C];
 
-type FourBitAdder<A extends FourBitNumber, B extends FourBitNumber, C extends Bit = 0> =
+export type FourBitAdder<A extends FourBitNumber, B extends FourBitNumber, C extends Bit = 0> =
   OneBitAdder<A[3], B[3], C> extends [infer Hi1, infer Lo1]
     ? OneBitAdder<A[2], B[2], Hi1 & Bit> extends [infer Hi2, infer Lo2]
       ? OneBitAdder<A[1], B[1], Hi2 & Bit> extends [infer Hi3, infer Lo3]
@@ -50,7 +50,7 @@ type FourBitAdder<A extends FourBitNumber, B extends FourBitNumber, C extends Bi
       : never
     : never;
 
-type FourBitALU<
+export type FourBitALU<
   A extends FourBitNumber, 
   B extends FourBitNumber, 
   Subtract extends Bit = 0
@@ -61,7 +61,7 @@ type _HiNibble<A extends EightBitNumber> =
 type _LoNibble<A extends EightBitNumber> =
     [A[4], A[5], A[6], A[7]];
 
-type EightBitAdder<
+export type EightBitAdder<
   A extends EightBitNumber, 
   B extends EightBitNumber, 
   C extends Bit = 0
@@ -70,7 +70,7 @@ type EightBitAdder<
       ? [...FourBitAdder<_HiNibble<A>, _HiNibble<B>, Hi1 & Bit>, ...Lo1]
       : never;
 
-type EightBitALU<
+export type EightBitALU<
   A extends EightBitNumber, 
   B extends EightBitNumber, 
   Subtract extends Bit = 0
@@ -84,7 +84,7 @@ type _HiByte<A extends SixteenBitNumber> =
 type _LoByte<A extends SixteenBitNumber> =
     [A[8], A[9], A[10], A[11], A[12], A[13], A[14], A[15]];
 
-type SixteenBitAdder<
+export type SixteenBitAdder<
   A extends SixteenBitNumber, 
   B extends SixteenBitNumber,
   C extends Bit = 0
@@ -93,7 +93,7 @@ type SixteenBitAdder<
       ? [...EightBitAdder<_HiByte<A>, _HiByte<B>, Hi1 & Bit>, ...Lo1]
       : never;
 
-type SixteenBitALU<
+export type SixteenBitALU<
   A extends SixteenBitNumber, 
   B extends SixteenBitNumber, 
   Subtract extends Bit = 0
@@ -106,7 +106,7 @@ type SixteenBitALU<
 
 type Reverse<T extends unknown[]> = T extends [infer Head, ...infer Tail] ? [...Reverse<Tail>, Head] : [];
 
-type BitsToDecimal<T extends Bit[]> = CheckNegative<T>;
+export type BitsToDecimal<T extends Bit[]> = CheckNegative<T>;
 
 type CheckNegative<T> = T extends [infer Head, ...infer Tail] 
   ? Head extends 1 
