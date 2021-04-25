@@ -6,22 +6,23 @@ type SixteenBitNumber = [...EightBitNumber, ...EightBitNumber];
 
 type Upcast<N extends FourBitNumber> = [0, 0, 0, 0, ...N];
 
-type AND<A extends Bit, B extends Bit> = A extends 1 ? B extends 1 ? 1 : 0 : 0;
-type OR<A extends Bit, B extends Bit> = A extends 1 ? 1 : B extends 1 ? 1 : 0;
-type NOT<A extends Bit> = A extends 1 ? 0 : 1;
-type XOR<A extends Bit, B extends Bit> = A extends 1 ? B extends 1 ? 0 : 1 : B extends 1 ? 1 : 0;
-type NAND<A extends Bit, B extends Bit> = NOT<AND<A, B>>;
-type NOR<A extends Bit, B extends Bit> = NOT<OR<A, B>>;
-type XNOR<A extends Bit, B extends Bit> = NOT<XOR<A, B>>;
+type And<A extends Bit, B extends Bit> = A extends 1 ? B extends 1 ? 1 : 0 : 0;
+type Or<A extends Bit, B extends Bit> = A extends 1 ? 1 : B extends 1 ? 1 : 0;
+type Not<A extends Bit> = A extends 1 ? 0 : 1;
+type Xor<A extends Bit, B extends Bit> = A extends 1 ? B extends 1 ? 0 : 1 : B extends 1 ? 1 : 0;
+type Nand<A extends Bit, B extends Bit> = Not<And<A, B>>;
+type Nor<A extends Bit, B extends Bit> = Not<Or<A, B>>;
+type Xnor<A extends Bit, B extends Bit> = Not<Xor<A, B>>;
 
-type OneBitAdder<A extends Bit, B extends Bit, C extends Bit = 0> = NAND<A, B> extends infer S0
-  ? NAND<NAND<A, S0 & Bit>, NAND<B, S0 & Bit>> extends infer S1
-    ? NAND<C, S1 & Bit> extends infer S2
-      ? [NAND<S2 & Bit, S0 & Bit>, NAND<NAND<S1 & Bit, S2 & Bit>, NAND<S2 & Bit, C>>, NAND<S2 & Bit, S0 & Bit>]
+type OneBitAdder<A extends Bit, B extends Bit, C extends Bit = 0> = Nand<A, B> extends infer S0
+  ? Nand<Nand<A, S0 & Bit>, Nand<B, S0 & Bit>> extends infer S1
+    ? Nand<C, S1 & Bit> extends infer S2
+      ? [Nand<S2 & Bit, S0 & Bit>, Nand<Nand<S1 & Bit, S2 & Bit>, Nand<S2 & Bit, C>>, Nand<S2 & Bit, S0 & Bit>]
       : never
     : never
   : never;
 
+  
 type FourBitAdder<
   A extends FourBitNumber, 
   B extends FourBitNumber, 
@@ -35,6 +36,12 @@ type FourBitAdder<
       : never
     : never
   : never;
+
+type FourBitALU<
+  A extends FourBitNumber, 
+  B extends FourBitNumber, 
+  Subtract extends Bit = 0
+> = FourBitAdder<A, [Xor<B[0], Subtract>, Xor<B[1], Subtract>, Xor<B[2], Subtract>, Xor<B[3], Subtract>], Subtract>;
 
 type EightBitAdder<
   A extends EightBitNumber, 
@@ -57,6 +64,15 @@ type EightBitAdder<
       : never 
     : never
   : never;
+
+type EightBitALU<
+  A extends EightBitNumber, 
+  B extends EightBitNumber, 
+  Subtract extends Bit = 0
+> = EightBitAdder<A, [
+  Xor<B[0], Subtract>, Xor<B[1], Subtract>, Xor<B[2], Subtract>, Xor<B[3], Subtract>, 
+  Xor<B[4], Subtract>, Xor<B[5], Subtract>, Xor<B[6], Subtract>, Xor<B[7], Subtract>,
+], Subtract>;
 
 type SixteenBitAdder<
   A extends SixteenBitNumber, 
@@ -101,6 +117,17 @@ type SixteenBitAdder<
       : never 
     : never 
   : never;
+
+type SixteenBitALU<
+  A extends SixteenBitNumber, 
+  B extends SixteenBitNumber, 
+  Subtract extends Bit = 0
+> = SixteenBitAdder<A, [
+  Xor<B[ 0], Subtract>, Xor<B[ 1], Subtract>, Xor<B[ 2], Subtract>, Xor<B[ 3], Subtract>, 
+  Xor<B[ 4], Subtract>, Xor<B[ 5], Subtract>, Xor<B[ 6], Subtract>, Xor<B[ 7], Subtract>, 
+  Xor<B[ 8], Subtract>, Xor<B[ 9], Subtract>, Xor<B[10], Subtract>, Xor<B[11], Subtract>,
+  Xor<B[12], Subtract>, Xor<B[13], Subtract>, Xor<B[14], Subtract>, Xor<B[15], Subtract>,
+], Subtract>;
 
 type Reverse<T extends unknown[]> = T extends [infer Head, ...infer Tail] ? [...Reverse<Tail>, Head] : [];
 
